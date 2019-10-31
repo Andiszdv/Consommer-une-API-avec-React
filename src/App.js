@@ -1,23 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [quote, setQuote] = useState({});
+
+  async function getSimpsonQuotes() {
+    try {
+      const response = await fetch(
+        "https://quests.wilders.dev/simpsons-quotes/quotes"
+      );
+      const jsonResponse = await response.json();
+      setQuote(jsonResponse[0]);
+    } catch (err) {
+      console.log("lalala");
+      console.error("err");
+    }
+  }
+  console.log(quote);
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <img src={quote.image} className="App-logo" alt="logo"></img>
+        <p>{quote.quote}</p>
+        <p>{quote.character}</p>
+
+        <button onClick={getSimpsonQuotes}>Récuperer un citation</button>
       </header>
     </div>
   );
